@@ -1,0 +1,21 @@
+{
+  "name": "y",
+  "description": "n",
+  "main": "y",
+  "authors": [
+    "ahmadawais"
+  ],
+  "license": "GPL-2.0",
+  "homepage": "https://github.com/NRDay/bm-starter",
+  "directory": "/assets/bower_components",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+  }
+}

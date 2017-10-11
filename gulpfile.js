@@ -47,6 +47,12 @@ var styleSRC                = './assets/css/style.scss'; // Path to main .scss f
 var styleDestination        = './'; // Path to place the compiled CSS file.
 // Default set to root folder.
 
+mainBowerFiles = require('main-bower-files');
+
+// Bower related
+var cssBowerDest            = './assets/css/vendor/';
+var jsBowerDest            = './assets/js/vendor/';
+
 // CSS Vendor related.
 var cssVendorSRC             = './assets/css/vendor/*.css'; // Path to CSS vendor folder.
 var cssVendorDestination     = './assets/css/'; // Path to place the compiled CSS vendors file.
@@ -162,7 +168,6 @@ gulp.task( 'browser-sync', function() {
   } );
 });
 
-
 /**
  * Task: `styles`.
  *
@@ -214,6 +219,15 @@ gulp.task( 'browser-sync', function() {
     .pipe( notify( { message: 'TASK: "styles" Completed! 💯', onLast: true } ) )
  });
 
+ gulp.task('bowerCss', function() {
+    // mainBowerFiles is used as a src for the task,
+    // usually you pipe stuff through a task
+    return gulp.src(mainBowerFiles('**/*.css'))
+        // Then pipe it to wanted directory, I use
+        // dist/lib but it could be anything really
+        .pipe(gulp.dest(cssBowerDest))
+});
+
  /**
   * Task: `vendorCSS`.
   *
@@ -225,7 +239,7 @@ gulp.task( 'browser-sync', function() {
   *     3. Renames the CSS file with suffix .min.css
   *     4. Uglifes/Minifies the CSS file and generates vendors.min.css
   */
- gulp.task( 'vendorsCss', function() {
+ gulp.task( 'vendorsCss', ['bowerCss'], function() {
   gulp.src( cssVendorSRC )
   .pipe( sourcemaps.init() )
     .pipe( concat( cssVendorFile + '.css' ) )
@@ -255,6 +269,15 @@ gulp.task( 'browser-sync', function() {
     .pipe( notify( { message: 'TASK: "vendorsCss" Completed! 💯', onLast: true } ) );
  });
 
+ gulp.task('bowerJs', function() {
+    // mainBowerFiles is used as a src for the task,
+    // usually you pipe stuff through a task
+    return gulp.src(mainBowerFiles('**/*.js'))
+        // Then pipe it to wanted directory, I use
+        // dist/lib but it could be anything really
+        .pipe(gulp.dest(jsBowerDest))
+});
+
  /**
   * Task: `vendorJS`.
   *
@@ -266,7 +289,7 @@ gulp.task( 'browser-sync', function() {
   *     3. Renames the JS file with suffix .min.js
   *     4. Uglifes/Minifies the JS file and generates vendors.min.js
   */
- gulp.task( 'vendorsJs', function() {
+ gulp.task( 'vendorsJs', ['bowerJs'], function() {
   gulp.src( jsVendorSRC )
     .pipe( concat( jsVendorFile + '.js' ) )
     .pipe( lineec() ) // Consistent Line Endings for non UNIX systems.
